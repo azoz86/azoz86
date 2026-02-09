@@ -3,64 +3,76 @@
 <head>
 <meta charset="UTF-8">
 <title>متجري</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f5f5f5;
-    direction: rtl;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  direction: rtl;
 }
-
 header {
-    background: #000;
-    color: white;
-    padding: 15px;
-    text-align: center;
-    font-size: 22px;
+  background: #000;
+  color: #fff;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-
-.products {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-    padding: 20px;
+.cart {
+  cursor: pointer;
+  font-size: 18px;
 }
-
-.card {
-    background: white;
-    border-radius: 12px;
-    padding: 15px;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+.container {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
 }
-
-.card img {
-    width: 100%;
-    border-radius: 10px;
+.product {
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
 }
-
-.card h3 {
-    margin: 10px 0;
+.product img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
 }
-
-.price {
-    color: green;
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-
 button {
-    background: black;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 8px;
-    cursor: pointer;
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  background: #000;
+  color: #fff;
+  cursor: pointer;
 }
-
-button:hover {
-    background: #444;
+#cartBox {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 300px;
+  height: 100%;
+  background: #fff;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+  padding: 15px;
+  transition: 0.3s;
+  overflow-y: auto;
+}
+#cartBox.active {
+  right: 0;
+}
+.cart-item {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+.total {
+  font-weight: bold;
+  margin-top: 10px;
 }
 </style>
 </head>
@@ -68,32 +80,61 @@ button:hover {
 <body>
 
 <header>
-🛒 متجري الإلكتروني
+  <h3>🛍️ متجري</h3>
+  <div class="cart" onclick="toggleCart()">🛒 (<span id="count">0</span>)</div>
 </header>
 
-<section class="products">
+<div class="container">
+  <div class="product">
+    <img src="https://via.placeholder.com/300">
+    <h4>منتج 1</h4>
+    <p>100 ريال</p>
+    <button onclick="addToCart('منتج 1', 100)">أضف للسلة</button>
+  </div>
 
-<div class="card">
-   <img src="images/PRODUCT1.JPG">
-    <h3>منتج 1</h3>
-    <div class="price">99 ر.س</div>
-    <button>أضف للسلة</button>
+  <div class="product">
+    <img src="https://via.placeholder.com/300">
+    <h4>منتج 2</h4>
+    <p>150 ريال</p>
+    <button onclick="addToCart('منتج 2', 150)">أضف للسلة</button>
+  </div>
 </div>
 
-<div class="card">
-    <img src="images/PRODUCT2.JPG">
-    <h3>منتج 2</h3>
-    <div class="price">149 ر.س</div>
-    <button>أضف للسلة</button>
+<div id="cartBox">
+  <h3>🛒 السلة</h3>
+  <div id="items"></div>
+  <div class="total">الإجمالي: <span id="total">0</span> ريال</div>
+  <button onclick="checkout()">إتمام الطلب</button>
 </div>
 
-<div class="card">
- <img src ="images/PRODUCT3.JPG">
-    <h3>منتج 3</h3>
-    <div class="price">199 ر.س</div>
-    <button>أضف للسلة</button>
-</div>
+<script>
+let cart = [];
+let total = 0;
 
-</section>
+function addToCart(name, price) {
+  cart.push({name, price});
+  total += price;
+  document.getElementById("count").innerText = cart.length;
+  renderCart();
+}
+
+function renderCart() {
+  const items = document.getElementById("items");
+  items.innerHTML = "";
+  cart.forEach(item => {
+    items.innerHTML += <div class="cart-item">${item.name} - ${item.price} ريال</div>;
+  });
+  document.getElementById("total").innerText = total;
+}
+
+function toggleCart() {
+  document.getElementById("cartBox").classList.toggle("active");
+}
+
+function checkout() {
+  alert("تم إرسال الطلب 👍 (اربطه واتساب أو تحويل)");
+}
+</script>
 
 </body>
+</html>
